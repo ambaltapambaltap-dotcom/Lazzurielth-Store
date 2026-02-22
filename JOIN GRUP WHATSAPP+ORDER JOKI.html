@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HD JOIN GRUP & JOKI · CATCH A MONSTER</title>
+    <!-- Font Awesome 6 (lengkap) untuk semua logo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* LEMBAR GAYA UTAMA – HIGH DEFINITION, 60fps stabil */
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #3d3d3d, #1f1f1f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            /* lapisan halus untuk ketajaman */
+            image-rendering: crisp-edges; /* tetap tajam */
+        }
+
+        /* pseudo-element untuk menambah kilau HD tanpa mengganggu performa */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxwYXRoIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMTUiIGQ9Ik0wIDBoNTB2NTBIMHoiIC8+PC9zdmc+');
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* kontainer super jernih */
+        .hero {
+            position: relative;
+            z-index: 30;
+            max-width: 880px;
+            width: 92%;
+            background: rgba(20, 20, 20, 0.2);
+            backdrop-filter: blur(4px) saturate(200%);
+            -webkit-backdrop-filter: blur(4px) saturate(200%);
+            border-radius: 3.5rem;
+            padding: 3rem 2.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+            border: 1px solid rgba(255,255,240,0.08);
+            margin: 40px 0;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .hero:hover {
+            box-shadow: 0 50px 80px rgba(0,0,0,0.9), 0 0 0 2px rgba(255, 220, 120, 0.2) inset;
+        }
+
+        /* DUA TOMBOL UTAMA — dengan resolusi tinggi */
+        .btn-wa, .btn-joki {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: #25D366;
+            padding: 20px 44px;
+            border-radius: 28px;              /* radius lembut */
+            box-shadow: 0 25px 35px -10px black, 0 7px 0 #128C7E, 0 0 0 2px rgba(255,255,200,0.3) inset;
+            cursor: pointer;
+            transition: all 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+            border: none;
+            width: fit-content;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.4);
+            transform: translateY(0);
+            will-change: transform, box-shadow;
+        }
+
+        .btn-wa:active, .btn-joki:active {
+            transform: translateY(6px);
+            box-shadow: 0 18px 25px -10px black, 0 2px 0 #128C7E, 0 0 0 2px rgba(255,255,200,0.4) inset;
+        }
+
+        .btn-wa:hover, .btn-joki:hover {
+            filter: brightness(1.08) saturate(1.2);
+            transform: scale(1.02) translateY(-2px);
+            box-shadow: 0 30px 45px -8px #000, 0 7px 0 #0e6b5e, 0 0 0 3px rgba(255, 255, 220, 0.5) inset;
+        }
+
+        .btn-wa i {
+            font-size: 3rem;
+            color: white;
+            filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.5));
+        }
+
+        .btn-wa span, .btn-joki span {
+            font-size: 2.2rem;
+            font-weight: 500;
+            font-style: italic;
+            color: white;
+            text-shadow: 3px 3px 0 #128C7E, 1px 1px 10px rgba(0,0,0,0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-joki span {
+            text-shadow: 3px 3px 0 #0f6f62;
+        }
+
+        /* wrapper */
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 30px;
+        }
+
+        /* ===== PANEL PEMBAYARAN MEWAH ===== */
+        .payment-panel {
+            margin-top: 40px;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px) saturate(300%);
+            -webkit-backdrop-filter: blur(12px) saturate(300%);
+            border-radius: 60px;
+            padding: 22px 30px;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 20px 30px -10px black, 0 0 30px rgba(255, 200, 50, 0.1) inset;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 15px 25px;
+        }
+
+        .payment-text {
+            color: #fae37f;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff5c1, #ffdb7c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 8px #ffb70055;
+            white-space: nowrap;
+        }
+
+        .payment-icons {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 204, 0, 0.5);
+            box-shadow: 0 0 10px #f5b81b33;
+            transition: 0.2s;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .payment-item i {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 5px gold);
+        }
+
+        /* warna khusus untuk setiap icon biar mirip asli */
+        .payment-item .fa-qrcode { color: #00a6ff; }          /* QRIS */
+        .payment-item .fa-google-pay { color: #5bbdff; }      /* GO-PAY via google-pay */
+        .payment-item .fa-donate { color: #2bde73; }          /* DANA (donate icon) */
+        .payment-item .fa-credit-card { color: #f2721e; }      /* OVO (credit-card)*/
+        .payment-item .fa-shopify { color: #7f54b3; }          /* SHOPEE PAY (shopify mirip)*/
+
+        /* teks bantuan & offline dukungan */
+        .offline-note {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #aaaaaa;
+            background: rgba(0,0,0,0.3);
+            padding: 6px 20px;
+            border-radius: 60px;
+            border: 1px solid #3f3f3f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+        }
+        .offline-note i {
+            color: #b7ff9e;
+        }
+
+        /* responsif mobile tetap HD */
+        @media (max-width: 650px) {
+            .hero { padding: 2rem 1rem; }
+            .btn-wa, .btn-joki { padding: 14px 28px; }
+            .btn-wa span, .btn-joki span { font-size: 1.6rem; }
+            .btn-wa i { font-size: 2.4rem; }
+            .payment-panel { flex-direction: column; align-items: center; padding: 18px; }
+            .payment-text { font-size: 1.3rem; white-space: normal; }
+            .payment-icons { gap: 12px; }
+        }
+
+        @media (max-width: 450px) {
+            .btn-wa span, .btn-joki span { font-size: 1.3rem; }
+            .payment-item { padding: 5px 12px; font-size: 0.9rem; }
+            .payment-item i { font-size: 1.6rem; }
+        }
+
+        /* aksesibilitas focus */
+        .btn-wa:focus-visible, .btn-joki:focus-visible, .payment-item:focus-within {
+            outline: 4px solid white;
+            outline-offset: 5px;
+        }
+
+        /* rahasia: tidak ada ketergantungan internet untuk styling; font tetap dari system */
+        /* namun jika online, font awesome tetap dimuat, jika offline tetap pakai fallback */
+    </style>
+</head>
+<body>
+
+    <!-- KONTEN UTAMA -->
+    <div class="hero">
+        <div class="button-wrapper">
+            <!-- TOMBOL JOIN GRUP WHATSAPP -->
+            <div class="btn-wa" id="waGroupBtn" role="button" tabindex="0">
+                <i class="fab fa-whatsapp"></i>
+                <span>JOIN GRUP WHATSAPP</span>
+            </div>
+
+            <!-- TOMBOL JOKI CATCH A MONSTER -->
+            <div class="btn-joki" id="jokiBtn" role="button" tabindex="0">
+                <span>JOKI CATCH A MONSTER</span>
+            </div>
+        </div>
+
+        <!-- VIA PAYMENT DENGAN LOGO - QRIS | GO-PAY | DANA | OVO | SHOPEE PAY -->
+        <div class="payment-panel">
+            <span class="payment-text">VIA PAYMENT:</span>
+            <div class="payment-icons">
+                <div class="payment-item"><i class="fas fa-qrcode"></i> <span>QRIS</span></div>
+                <div class="payment-item"><i class="fab fa-google-pay"></i> <span>GO-PAY</span></div>
+                <div class="payment-item"><i class="fas fa-donate"></i> <span>DANA</span></div>
+                <div class="payment-item"><i class="fas fa-credit-card"></i> <span>OVO</span></div>
+                <div class="payment-item"><i class="fab fa-shopify"></i> <span>SHOPEE PAY</span></div>
+            </div>
+        </div>
+
+        <!-- indikator offline-ready + 60fps guarantee (hiasan) -->
+        <div class="offline-note">
+            <i class="fas fa-bolt"></i> 60fps HD · FULL OFFLINE · INTERNET UNTUK STABILITAS EKSTRA
+            <i class="fas fa-wifi"></i>
+        </div>
+    </div>
+
+    <!-- DATA TERSEMBUNYI (phone & message) -->
+    <div class="hidden" id="jokiData" data-phone="6285784457652" data-message="Halo bang, saya mau joki game CATCH A MONSTER, berapa bang?" style="display: none;"></div>
+
+    <script>
+        (function() {
+            // 60fps friendly — tidak ada heavy task, langsung ringan
+
+            const waBtn = document.getElementById('waGroupBtn');
+            const jokiBtn = document.getElementById('jokiBtn');
+            const jokiData = document.getElementById('jokiData');
+
+            // ambil dari dataset
+            const phone = jokiData.dataset.phone;           // "6285784457652"
+            const defaultMessage = jokiData.dataset.message; 
+
+            // Grup WhatsApp
+            waBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Grup link sesuai permintaan
+                window.open('https://chat.whatsapp.com/ESQg0HRUkfpJjFb0Iig5gw?mode=gi_t', '_blank');
+            });
+
+            // Tombol joki => wa.me
+            jokiBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const waLink = `https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`;
+                window.open(waLink, '_blank');
+            });
+
+            // akses keyboard (space/enter)
+            waBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    waBtn.click();
+                }
+            });
+            jokiBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    jokiBtn.click();
+                }
+            });
+
+            // sentuhan tambahan: menjaga FPS dengan requestAnimationFrame tidak diperlukan.
+            // tapi kita pastikan tidak ada kebocoran memori.
+
+            // optional: deteksi internet? bukan untuk blocking, hanya stabilitas.
+            // kita tambahkan class kecil jika online (hanya visual)
+            const offlineNote = document.querySelector('.offline-note');
+            if (navigator.onLine) {
+                offlineNote.innerHTML = '<i class="fas fa-bolt"></i> 60fps HD · MODE ONLINE (SUPER LANCAR) <i class="fas fa-satellite-dish"></i>';
+            } else {
+                offlineNote.innerHTML = '<i class="fas fa-bolt"></i> 60fps HD · OFFLINE (TETAP MAKSIMAL) <i class="fas fa-mobile-alt"></i>';
+            }
+
+            // mendengarkan perubahan online/offline (untuk memperbarui pesan)
+            window.addEventListener('online', function() {
+                offlineNote.innerHTML = '<i class="fas fa-bolt"></i> 60fps HD · MODE ONLINE (SUPER LANCAR) <i class="fas fa-satellite-dish"></i>';
+            });
+            window.addEventListener('offline', function() {
+                offlineNote.innerHTML = '<i class="fas fa-bolt"></i> 60fps HD · OFFLINE (TETAP MAKSIMAL) <i class="fas fa-mobile-alt"></i>';
+            });
+        })();
+    </script>
+</body>
+</html>
